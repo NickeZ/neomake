@@ -179,7 +179,7 @@ function! s:MakeJob(make_id, options) abort
                         \ jobinfo.make_id, jobinfo.id), {'make_id': s:make_id})
             let jobinfo.restarting = s:make_id
             if neomake#CancelJob(jobinfo.id)
-                throw 'Neomake: restarting job'
+                return -2
             endif
             " Previous job was not running anymore, and we are not being
             " restarted through its exit handler.
@@ -680,7 +680,7 @@ function! s:Make(options) abort
             endif
             continue
         endtry
-        if job_id != -1
+        if job_id >= 0
             call add(job_ids, job_id)
         endif
         " If we are serializing makers, stop after the first one. The
