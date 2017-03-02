@@ -177,11 +177,11 @@ function! s:MakeJob(make_id, options) abort
                         \ jobinfo.make_id, jobinfo.id), {'make_id': s:make_id})
             let jobinfo.restarting = s:make_id
             if neomake#CancelJob(jobinfo.id)
-                throw 'Neomake: resarting job'
+                throw 'Neomake: restarting job'
             endif
             " Previous job was not running anymore, and we are not being
             " restarted through its exit handler.
-            unlet jobinfo.restarting
+            return s:MakeJob(a:make_id, a:options)
         endif
     endif
 
