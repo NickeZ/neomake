@@ -143,15 +143,18 @@ function! neomake#makers#ft#rust#CargoProcessOutput(context) abort
             endif
         endif
         let code_dict = get(data, 'code', -1)
-        if code_dict is g:neomake#compat#json_null
-            if get(data, 'level', '') ==# 'warning'
-                let error.type = 'W'
-            else
-                let error.type = 'E'
-            endif
+        if get(data, 'level', '') ==# 'warning'
+            let error.type = 'W'
         else
-            let error.type = code_dict['code'][0]
-            let error.nr = code_dict['code'][1:]
+            let error.type = 'E'
+        endif
+        if code_dict isnot g:neomake#compat#json_null
+            if code_dict['code'][0] == 'W' || code_dict['code'][0] == 'E'
+                " Only the rust compiler uses WXXXX or EXXXX for error codes,
+                " clippy uses clippy::<error-name>
+                let error.type = code_dict['code'][0]
+                let error.nr = code_dict['code'][1:]
+            endif
         endif
 
         let span = data.spans[0]
