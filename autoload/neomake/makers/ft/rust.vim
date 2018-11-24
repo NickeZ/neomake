@@ -197,6 +197,9 @@ function! neomake#makers#ft#rust#CargoProcessOutput(context) abort
             if !has_key(child, 'message')
                 continue
             endif
+            if has_key(child, 'level') && child.level ==# "help"
+                continue
+            endif
 
             let info = deepcopy(error)
             let info.type = 'I'
