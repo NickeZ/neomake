@@ -149,7 +149,7 @@ function! neomake#makers#ft#rust#CargoProcessOutput(context) abort
             let error.type = 'E'
         endif
         if code_dict isnot g:neomake#compat#json_null
-            if code_dict['code'][0] == 'W' || code_dict['code'][0] == 'E'
+            if code_dict['code'][0] ==# 'W' || code_dict['code'][0] ==# 'E'
                 " Only the rust compiler uses WXXXX or EXXXX for error codes,
                 " clippy uses clippy::<error-name>
                 let error.type = code_dict['code'][0]
@@ -200,7 +200,7 @@ function! neomake#makers#ft#rust#CargoProcessOutput(context) abort
             if !has_key(child, 'message')
                 continue
             endif
-            if has_key(child, 'level') && child.level ==# "help"
+            if has_key(child, 'level') && child.level ==# 'help'
                 continue
             endif
 
@@ -238,7 +238,7 @@ endfunction
 
 function! neomake#makers#ft#rust#FillErrorFromSpan(error, span) abort
     if !has_key(a:error, 'filename')
-        let a:error.filename = filename
+        let a:error.filename = a:span.file_name
     endif
     let a:error.col = a:span.column_start
     let a:error.lnum = a:span.line_start
