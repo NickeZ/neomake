@@ -135,6 +135,13 @@ function! neomake#makers#ft#rust#CargoProcessOutput(context) abort
         endif
 
         let error = {'maker_name': 'cargo'}
+        let target = get(decoded, 'target', -1)
+        if type(target) == type({})
+            let filename = get(target, 'src_path', -1)
+            if type(filename) == type('')
+                let error.filename = filename
+            endif
+        endif
         let code_dict = get(data, 'code', -1)
         if code_dict is g:neomake#compat#json_null
             if get(data, 'level', '') ==# 'warning'
@@ -224,7 +231,9 @@ function! neomake#makers#ft#rust#CargoProcessOutput(context) abort
 endfunction
 
 function! neomake#makers#ft#rust#FillErrorFromSpan(error, span) abort
-    let a:error.filename = a:span.file_name
+    if !has_key(a:error, 'filename')
+        let a:error.filename = filename
+    endif
     let a:error.col = a:span.column_start
     let a:error.lnum = a:span.line_start
     let a:error.length = a:span.byte_end - a:span.byte_start
