@@ -40,12 +40,16 @@ Execute (cargo: uses primary span):
 
   CallNeomake 1, [cargo]
 
+  " Uses the bufnr from src_path.
+  let expected_bufnr = bufnr('/home/dpc/tmp/testfoo/build/main.rs')
+
   AssertEqualQf getloclist(0), [{
-  \ 'lnum': 6, 'bufnr': bufnr('%'), 'col': 5, 'valid': 1, 'vcol': 0, 'nr': 49,
+  \ 'lnum': 6, 'bufnr': expected_bufnr, 'col': 5, 'valid': 1, 'vcol': 0, 'nr': 49,
   \ 'type': 'E', 'pattern': '',
   \ 'text': 'this function takes 1 parameter but 2 parameters were supplied: expected 1 parameter',
   \ }]
   bwipe
+  exe 'bwipe '.expected_bufnr
 
 Execute (rust: cargo: uses directory with Cargo.toml as cwd):
   new
