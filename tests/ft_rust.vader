@@ -51,6 +51,26 @@ Execute (cargo: uses primary span):
   bwipe
   exe 'bwipe '.expected_bufnr
 
+Execute (clippy: uses primary span):
+  new
+  file build/main.rs
+  let cargo = NeomakeTestsGetMakerWithOutput(neomake#makers#ft#rust#cargo(),
+    \ 'tests/fixtures/rust/clippy_warning.json')
+  let cargo.cwd = getcwd()
+
+  CallNeomake 1, [cargo]
+
+  " Uses the bufnr from src_path.
+  let expected_bufnr = bufnr('/tmp/vim-test/src/main.rs')
+
+  AssertEqualQf getloclist(0), [{
+  \ 'lnum': 4, 'bufnr': expected_bufnr, 'col': 8, 'valid': 1, 'vcol': 0, 'nr': -1,
+  \ 'type': 'W', 'pattern': '',
+  \ 'text': 'length comparison to zero. #[warn(clippy::len_zero)] on by default',
+  \ }]
+  bwipe
+  exe 'bwipe '.expected_bufnr
+
 Execute (rust: cargo: uses directory with Cargo.toml as cwd):
   new
   let maker = neomake#makers#ft#rust#cargo()
