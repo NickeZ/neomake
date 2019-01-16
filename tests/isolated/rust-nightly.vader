@@ -1,0 +1,18 @@
+Include: ../include/setup.vader
+
+Execute (Setup: monkeypatch autoload/neomake/clippy.vim):
+  " Monkeypatch to force enable rust nightly
+  Save g:neomake_clippy_rustup_has_nightly
+  let g:neomake_clippy_rustup_has_nightly = 1
+
+  runtime autoload/neomake/makers/clippy.vim
+
+
+Include: ../ft_rust.vader
+
+
+Execute (Teardown: undo monkeypatching):
+  " Restore if not profiling.
+  if !v:profiling
+    runtime autoload/neomake/makers/clippy.vim
+  endif

@@ -49,7 +49,7 @@ Execute (cargo: uses primary span):
   \ }]
   bwipe
 
-Execute (clippy: uses primary span):
+Execute (rust: clippy: trivial test):
   new
   file build/main.rs
   let cargo = NeomakeTestsGetMakerWithOutput(neomake#makers#ft#rust#cargo(),
