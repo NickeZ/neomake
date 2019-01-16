@@ -158,7 +158,7 @@ Execute (cargo error message):
   call neomake#Make(1, [cargo])
   NeomakeTestsWaitForFinishedJobs
 
-  let bufnr = bufnr('lib.rs')
+  let bufnr = bufnr('build/lib.rs')
   AssertEqualQf getloclist(0), [{
     \ 'type': 'E',
     \ 'bufnr': bufnr,

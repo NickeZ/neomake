@@ -1,3 +1,5 @@
+let s:slash = neomake#utils#Slash()
+
 function! neomake#makers#ft#rust#EnabledMakers() abort
     return ['cargo']
 endfunction
@@ -123,7 +125,7 @@ endfunction
 " elements per line.
 function! neomake#makers#ft#rust#CargoProcessOutput(context) abort
     let errors = []
-    let cwd = get(get(get(a:context, 'jobinfo', {}), 'maker'), 'cwd', '')
+    let cwd = a:context.jobinfo.maker.cwd
     for line in a:context['output']
         if line[0] !=# '{'
             continue
@@ -136,7 +138,7 @@ function! neomake#makers#ft#rust#CargoProcessOutput(context) abort
         endif
 
         let error = {'maker_name': 'cargo'}
-        let code_dict = get(data, 'code', -1)
+        let code_dict = get(data, 'code', g:neomake#compat#json_null)
         if get(data, 'level', '') ==# 'warning'
             let error.type = 'W'
         else
@@ -232,8 +234,7 @@ function! neomake#makers#ft#rust#CargoProcessOutput(context) abort
 endfunction
 
 function! neomake#makers#ft#rust#FillErrorFromSpan(error, span, cwd) abort
-    let slash = neomake#utils#Slash()
-    let a:error.filename = expand(a:cwd) . slash . a:span.file_name
+    let a:error.filename = expand(a:cwd) . s:slash . a:span.file_name
     let a:error.col = a:span.column_start
     let a:error.lnum = a:span.line_start
     let a:error.length = a:span.byte_end - a:span.byte_start
