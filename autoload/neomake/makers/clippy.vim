@@ -36,7 +36,7 @@ function! neomake#makers#clippy#clippy() abort
             \ 'process_output': cargo_maker.process_output,
             \ }
     endif
-    " InitForJob will lazy initialize cwd for us
+    " InitForJob will lazily initialize cwd for us.
     let maker.InitForJob = cargo_maker.InitForJob
     return maker
 endfunction
