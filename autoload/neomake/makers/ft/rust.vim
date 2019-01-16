@@ -34,7 +34,7 @@ function! s:get_cargo_workspace_root() abort
         if !empty(cd_back_cmd)
             exe cd_back_cmd
         endif
-        if v:shell_error
+        if v:shell_error || output ==# ''
             call neomake#log#debug(printf(
                         \ 'Failed to get cargo metadata for workspace using %s.',
                         \ string(cmd)))

@@ -5,14 +5,18 @@ Execute (Setup: monkeypatch autoload/neomake/clippy.vim):
   Save g:neomake_clippy_rustup_has_nightly
   let g:neomake_clippy_rustup_has_nightly = 1
 
-  runtime autoload/neomake/makers/clippy.vim
+  "runtime autoload/neomake/makers/clippy.vim
 
+"Include: ../ft_rust.vader
 
-Include: ../ft_rust.vader
+Execute (Neomake! clippy):
+  call g:NeomakeTestsCreateExe('cargo')
+  RunNeomakeProject clippy
+  AssertNeomakeMessage 'Running makers: clippy.', 3
 
 
 Execute (Teardown: undo monkeypatching):
   " Restore if not profiling.
-  if !v:profiling
-    runtime autoload/neomake/makers/clippy.vim
-  endif
+  "if !v:profiling
+  "  runtime autoload/neomake/makers/clippy.vim
+  "endif
