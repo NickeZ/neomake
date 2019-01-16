@@ -4,7 +4,7 @@ function! neomake#makers#clippy#clippy() abort
     " When rustup and a nightly toolchain is installed, that is used.
     " Otherwise, the default cargo exectuable is used. If this is not part
     " of a nightly rust, this will fail.
-    if get(g:, 'neomake_clippy_rustup_has_nightly', -1)
+    if get(g:, 'neomake_clippy_rustup_has_nightly', -1) == -1
         if !executable('rustup')
             let g:neomake_clippy_rustup_has_nightly = 0
             call system('rustc --version | grep -q "\-nightly"')
