@@ -24,16 +24,19 @@ function! neomake#makers#clippy#clippy() abort
     let json_args = ['--message-format=json', '--quiet']
 
     if s:rustup_has_nightly
-        return {
+        let maker = {
             \ 'exe': 'rustup',
             \ 'args': ['run', 'nightly', 'cargo', 'clippy'] + json_args,
             \ 'process_output': cargo_maker.process_output,
             \ }
     else
-        return {
+        let maker = {
             \ 'exe': 'cargo',
             \ 'args': ['clippy'] + json_args,
             \ 'process_output': cargo_maker.process_output,
             \ }
     endif
+    " InitForJob will lazy initialize cwd for us
+    let maker.InitForJob = cargo_maker.InitForJob
+    return maker
 endfunction
