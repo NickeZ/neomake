@@ -232,9 +232,8 @@ function! neomake#makers#ft#rust#CargoProcessOutput(context) abort
 endfunction
 
 function! neomake#makers#ft#rust#FillErrorFromSpan(error, span, cwd) abort
-    if !has_key(a:error, 'filename')
-        let a:error.filename = a:cwd . '/' . a:span.file_name
-    endif
+    let slash = neomake#utils#Slash()
+    let a:error.filename = expand(a:cwd) . slash . a:span.file_name
     let a:error.col = a:span.column_start
     let a:error.lnum = a:span.line_start
     let a:error.length = a:span.byte_end - a:span.byte_start
