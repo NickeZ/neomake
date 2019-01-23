@@ -21,6 +21,20 @@ Execute (cargo info message):
   AssertEqual [], getloclist(0)
   bwipe
 
+Execute (cargo span with expansions):
+  new
+  file build/main.rs
+  let cargo = NeomakeTestsGetMakerWithOutput(neomake#makers#ft#rust#cargo(),
+    \ '../tests/fixtures/rust/cargo_span_with_expansion.json')
+
+  CallNeomake 1, [cargo]
+
+  let expected_bufnr = bufnr('src/main.rs')
+
+  AssertEqual getloclist(0), [{'lnum': 2, 'bufnr': expected_bufnr, 'col': 30, 'valid': 1, 'vcol': 0, 'nr': -1, 'type': 'E', 'pattern': '', 'text': 'argument never used'}, {'lnum': 5, 'bufnr': expected_bufnr, 'col': 5, 'valid': 1, 'vcol': 0, 'nr': -1, 'type': 'E', 'pattern': '', 'text': 'argument never used'}]
+  exe 'bwipe '.expected_bufnr
+  bwipe
+
 Execute (cargo error without span):
   new
   file build/lib.rs

@@ -12,6 +12,7 @@ function! neomake#makers#clippy#clippy() abort
                 call neomake#log#warning('Clippy requires a nightly rust installation.')
             endif
         else
+            " This doesn't work in vader because HOME is a temporary dir
             call system('rustup show | grep -q "^nightly-"')
             let g:neomake_clippy_rustup_has_nightly = !v:shell_error
         endif

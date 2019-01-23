@@ -7,7 +7,6 @@ Execute (Clippy: uses rustup with nightly):
   let maker = neomake#makers#clippy#clippy()
   AssertEqual maker.exe, 'rustup'
 
-
 Execute (Teardown: undo monkeypatching):
   " Restore if not profiling.
   if !v:profiling

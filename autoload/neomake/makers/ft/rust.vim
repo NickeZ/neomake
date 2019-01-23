@@ -161,10 +161,14 @@ function! neomake#makers#ft#rust#CargoProcessOutput(context) abort
             endif
         endfor
 
+        "Log span
+
         let expanded = 0
         let has_expansion = type(span.expansion) == type({})
                     \ && type(span.expansion.span) == type({})
                     \ && type(span.expansion.def_site_span) == type({})
+
+        "Log has_expansion
 
         if span.file_name =~# '^<.*>$' && has_expansion
             let expanded = 1
