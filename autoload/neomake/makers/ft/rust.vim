@@ -210,10 +210,10 @@ function! neomake#makers#ft#rust#CargoProcessOutput(context) abort
 
             if len(child.spans)
                 let span = child.spans[0]
-                if span.file_name =~# '^<.*>$'
-                            \ && type(span.expansion) == type({})
+                let has_expansion = type(span.expansion) == type({})
                             \ && type(span.expansion.span) == type({})
                             \ && type(span.expansion.def_site_span) == type({})
+                if span.file_name =~# '^<.*>$' && has_expansion
                     call neomake#makers#ft#rust#FillErrorFromSpan(info,
                                 \ span.expansion.span, cwd)
                 else
