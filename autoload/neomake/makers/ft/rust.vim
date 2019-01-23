@@ -161,14 +161,10 @@ function! neomake#makers#ft#rust#CargoProcessOutput(context) abort
             endif
         endfor
 
-        "Log span
-
         let expanded = 0
         let has_expansion = type(span.expansion) == type({})
                     \ && type(span.expansion.span) == type({})
                     \ && type(span.expansion.def_site_span) == type({})
-
-        "Log has_expansion
 
         if span.file_name =~# '^<.*>$' && has_expansion
             let expanded = 1
@@ -197,15 +193,14 @@ function! neomake#makers#ft#rust#CargoProcessOutput(context) abort
         endif
 
         for child in children[1:]
-            if !has_key(child, 'message')
-                continue
-            endif
-            if has_key(child, 'level') && child.level ==# 'help'
+            " Ignore message if it is only help level
+            if get(child, 'level', '') ==# 'help'
                 continue
             endif
 
             let info = deepcopy(error)
             let info.type = 'I'
+            " message is mandatory so it is safe to access it
             let info.text = child.message
             call neomake#postprocess#compress_whitespace(info)
             if has_key(child, 'rendered')
