@@ -1,0 +1,14 @@
+Include: ../include/setup.vader
+
+Execute (Clippy: detect nightly):
+  Save g:neomake_clippy_rustup_has_nightly
+  let g:neomake_clippy_rustup_has_nightly = -1
+
+  let maker = neomake#makers#clippy#clippy()
+  AssertEqual maker.exe, 'rustup'
+
+Execute (Teardown: undo monkeypatching):
+  " Restore if not profiling.
+  if !v:profiling
+    runtime autoload/neomake/makers/clippy.vim
+  endif
